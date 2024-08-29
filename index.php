@@ -1,3 +1,35 @@
+<?php
+    //Initializing variables/objects
+    $latestversion = 0.62;
+    $updateagentpattern = '/Catalyst\/Windows|Unix|\/|x86|x86_64|arm64\/\d\.\d{2}/';
+    $useragent = $_SERVER['HTTP_USER_AGENT'];
+    $psinstaller = fopen("scripts/install.ps1", "r") or die("PHP is fucked up man");
+    $shinstaller = fopen("scripts/install", "r") or die("PHP is still fucked up");
+    $psudpater = fopen("scripts/update.ps1", "r") or die("PHP is fucked up man");
+    $shudpater = fopen("scripts/update", "r") or die("PHP is fucked up man");
+
+    
+    if(str_contains($useragent, "PowerShell")){
+        if (str_contains($useragent, "Win")){
+            header('Content-Type: text/plain');
+            echo fread($psinstaller, filesize("scripts/install.ps1"));
+            fclose($psinstaller);
+            exit();
+        }
+    }
+    else if (str_contains($useragent, "curl")){
+            if (str_contains($useragent, "Linux")){
+            header('Content-Type: text/plain');
+            echo fread($shinstaller, filesize("scripts/install"));
+            fclose($shinstaller);
+            exit();
+        }
+    }
+    else {
+        preg_match_all($useragent, $updateagentpattern, $matches)
+        
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
