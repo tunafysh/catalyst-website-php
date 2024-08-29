@@ -1,5 +1,110 @@
+body{
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    overflow: hidden;
+}
+
 #main{
     background-color: #ecfdf5;
     color: #022c22;
     overflow: hidden;
+}
+
+#navbar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 98.5vw;
+    backdrop-filter: blur(12px);
+    height: 7vh;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem;
+    padding-right: 1.25rem;
+    padding-left: 1.25rem;
+}
+
+#navtitle{
+    margin-right: 0.5rem;
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.75rem; /* 28px */
+    font-weight: bold;
+}
+
+#links{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    list-style-type: none;
+}
+
+.link{
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 1.25rem;
+    transition: 500ms;
+    text-decoration: none !important;
+    color:black
+}
+
+.link:hover{
+    color: #10B981;
+}
+
+#content{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ecfdf5;
+    color: black;
+}
+
+#header {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1.25rem;
+    opacity: 70%;
+    text-align: center;
+}
+
+#coloredtitle{
+    background: linear-gradient(to bottom right, #06b6d4 40%, #10b981 50%);
+    background-clip: text;
+    color: transparent;
+}
+
+#description{
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.75rem; /* 28px */
+    text-wrap: wrap;
+    font-weight: bold;
+    margin-bottom: 1.25rem;
+    opacity: 70%;
+    width: 50vw;
+    text-align: center;
+}
+
+#distributor{
+    min-width: fit-content;
+    text-wrap: nowrap;
+    width: fit-content;
+    height: 2.5rem;
+    background-color: #003C39;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    transition: 500ms;
 }
