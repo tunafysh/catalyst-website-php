@@ -1,76 +1,76 @@
 <?php
     //Initializing variables/objects
     $latestversion = 0.62;
-    $updateagentpattern = '/Catalyst\/(Windows|Unix)\/\d.\d{2}\/(check|update)/';
+    $updateagentpattern = '/Catalyst\/(Windows|Unix)\/\d\.\d{2}\/(True|False)/';
     $useragent = $_SERVER['HTTP_USER_AGENT'];
     $psinstaller = fopen("scripts/install.ps1", "r") or die("PHP is fucked up man");
     $shinstaller = fopen("scripts/install", "r") or die("PHP is still fucked up");
-    $psbetainstaller = fopen("scripts/betainstall.ps1", "r") or die("PHP is fucked up man");
-    $shbetainstaller = fopen("scripts/betainstall", "r") or die("PHP is still fucked up");
     $psudpater = fopen("scripts/update.ps1", "r") or die("PHP is fucked up man");
     $shudpater = fopen("scripts/update", "r") or die("PHP is fucked up man");
 
     class Catalyst {
-        public $os
-        public $ver
-        public $action
-        function parse($string) {
-            $data = explode("/", $string);
-            $data = array_shift($data)
-            $this->os = $data[0]
-            $this->ver = $data[1]
-            $this->action = $data[2]
+        public $os;
+        public $ver;
+        public $update;
+        function parse($str) {
+            $data = explode("/", $str);
+            array_shift($data);
+            $this->os = $data[0];
+            $this->ver = $data[1];
+            $this->update = $data[2];
         }
 
         function checkupd() {
-            $ver = $this->ver
-            $os = $this->os
-            switch ($ver){
-                case $ver > $latestversion:
-                    header('Content-Type: text/plain');
-                    echo "Largerversion";
-                    exit();
-                    break;
 
-                case $ver == $latestversion:
-                    header('Content-Type: text/plain');
-                    echo "Equalversion";
-                    exit();
-                    break;
-                default: 
-                    header('Content-Type: text/plain');
-                    echo "Latestversion";
-                    exit();
-                    break;
+            $ver = $this->ver;
+            $os = $this->os;
+            if( $ver > $GLOBALS["latestversion"]){
+
+                header('Content-Type: text/plain');
+                echo "largerver";
+                exit();
+            }
+            if ($ver == $GLOBALS["latestversion"]){
+
+                header('Content-Type: text/plain');
+                echo "latestver";
+                exit();
+            }
+            if ($ver < $GLOBALS["latestversion"]){
+
+                header('Content-Type: text/plain');
+                echo "updatevaliable";
+                exit();
             }
         }
 
         function update() {
-            $ver = $this->ver
-            $os = $this->os
-            switch ($ver){
-                case $ver > $latestversion:
-                    header('Content-Type: text/plain');
-                    echo "Largerversion";
-                    exit();
-                    break;
+            $ver = $this->ver;
+            $os = $this->os;
+            if($ver > $GLOBALS["latestversion"]){
 
-                case $ver == $latestversion:
-                    header('Content-Type: text/plain');
-                    echo "Equalversion";
-                    exit();
-                    break;
-                default: 
-                    header('Content-Type: text/plain');
-                    if(str_contains($os, "Win")){
-                        echo fread($psudpater, filesize("scripts/update.ps1"));
-                    }
-                    else{
-                        echo fread($psudpater, filesize("scripts/update"));
-                    }
-                    exit();
-                    break;
+                header('Content-Type: text/plain');
+                echo $GLOBALS['latestversion'];
+                echo "largerver";
+                exit();
             }
+            else if ($ver == $GLOBALS["latestversion"]){
+
+                header('Content-Type: text/plain');
+                echo "latestver";
+                exit();
+            }
+            else{
+
+                header('Content-Type: text/plain');
+                if(str_contains($os, "Win")){
+                    echo fread($GLOBALS["psudpater"], filesize("scripts/update.ps1"));
+                }
+                else{
+                    echo fread($GLOBALS["shupdater"], filesize("scripts/update"));
+                }
+                exit();
+            } 
         }
     }
 
@@ -83,7 +83,8 @@
             exit();
         }
     }
-    else if (str_contains($useragent, "curl")){
+    
+    if (str_contains($useragent, "curl")){
          if (str_contains($useragent, "Linux")){
             header('Content-Type: text/plain');
             echo fread($shinstaller, filesize("scripts/install"));
@@ -91,19 +92,21 @@
             exit();
         }
     }
-    else {
-        preg_match_all($useragent, $updateagentpattern, $matches)
+
+    if(str_contains($useragent, "Catalyst")){
+        preg_match_all($updateagentpattern, $useragent, $matches);
         if (!$matches > 0){
-            exit()
+            exit();
         }
+        
+        $data = new Catalyst();
+        $data->parse($matches[0][0]);
 
-        $data = new Catalyst()
-
-        if($data->action == "check"){
-            $data->checkupd()
+        if($data->update == "True"){
+            $data->update();
         }
         else{
-            $data->update()
+            $data->checkupd();
         }
 
             
