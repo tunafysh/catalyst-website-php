@@ -1,7 +1,7 @@
 <?php
     //Initializing variables/objects
     $latestversion = 0.62;
-    $updateagentpattern = '/Catalyst\/(Windows|Unix)\/\d\.\d{2}\/(True|False)/';
+    $updateagentpattern = '/Catalyst\/(Windows|Unix)\/\d\.\d{2}\/(check|update)/';
     $useragent = $_SERVER['HTTP_USER_AGENT'];
     $psinstaller = fopen("scripts/install.ps1", "r") or die("PHP is fucked up man");
     $shinstaller = fopen("scripts/install", "r") or die("PHP is still fucked up");
@@ -102,7 +102,7 @@
         $data = new Catalyst();
         $data->parse($matches[0][0]);
 
-        if($data->update == "True"){
+        if($data->update == "update"){
             $data->update();
         }
         else{
