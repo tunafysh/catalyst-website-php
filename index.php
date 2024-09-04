@@ -3,10 +3,10 @@
     $latestversion = 0.62;
     $updateagentpattern = '/Catalyst\/(Windows|Unix)\/\d\.\d{2}\/(check|update)/';
     $useragent = $_SERVER['HTTP_USER_AGENT'];
-    $psinstaller = fopen("scripts/install.ps1", "r") or die("PHP is fucked up man");
-    $shinstaller = fopen("scripts/install", "r") or die("PHP is still fucked up");
-    $psudpater = fopen("scripts/update.ps1", "r") or die("PHP is fucked up man");
-    $shudpater = fopen("scripts/update", "r") or die("PHP is fucked up man");
+    $psinstaller = fopen("scripts/install.ps1", "r") or die("error loading pwsh installer");
+    $shinstaller = fopen("scripts/install", "r") or die("error loading bash installer");
+    $psudpater = fopen("scripts/update.ps1", "r") or die("error loading pwsh updater");
+    $shudpater = fopen("scripts/update", "r") or die("error loading bash updater");
 
     class Catalyst {
         public $os;
