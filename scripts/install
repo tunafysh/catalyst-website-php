@@ -1,3 +1,78 @@
 #!/bin/bash
 
-echo "Hello world"
+$platform = $(uname -ms)
+
+function info() {
+    echo -e "\e[1;97minfo:\033[0m $1"
+}
+
+function warn() {
+    echo -e "\e[1;93mwarning:\033[0m $1"
+}
+
+function err() {
+    echo -e "\e[1;93merror:\033[0m $1"
+}
+
+info "Initiating installation"
+
+if [[ -d "$HOME/.catalyst" ]]; then
+
+    read -r -n1 -p "Catalyst already installed. Reainstall it?" REINSTALL
+
+    if [[ $REINSTALL == "y" ]]; then
+        info "Reinstalling"
+        rm -rf ~/.catalyst
+    else
+        error "Exiting"
+        exit 0
+    fi
+
+fi
+
+info "Checking system"
+
+case $platform in
+'Linux aarch64' | 'Linux arm64')
+    target=linux-aarch64
+    ;;
+'MINGW64'*)
+    target=windows-x64
+    ;;
+'Linux x86_64' | *)
+    target=linux-x64
+    ;;
+esac
+
+info "Downloading binary"
+
+<<<<<<< HEAD
+curl -sSL --progress-bar https://github.com/tunafysh/Catalyst/releases/download/v0.0.2/catalyst-linux-amd64.tar.gz | tar -xzv -C ~/.catalyst/bin catalyst
+=======
+mkdir -p ~/.catalyst/bin
+
+cpu_arch=$(uname -m)
+if [[ $cpu_arch == "x86_64" ]]; then
+    cpu_arch="amd64"
+elif [[ $cpu_arch == "aarch64" ]]; then
+    cpu_arch="arm64"
+fi
+
+info "Installing Catalyst"
+
+curl -sSL https://github.com/tunafysh/Catalyst/releases/download/v0.0.2/catalyst-linux-$cpu_arch.zip | unzip -d ~/.catalyst/bin
+
+info "Setting up Catalyst"
+
+export PATH=~/.catalyst/bin:$PATH
+
+echo -e "[Desktop Entry]\nName=Catalyst URL Handler\n
+Exec=$HOME/.catalyst/bin/clyhandler %u\n
+Type=Application\nTerminal=true\n
+MimeType=x-scheme-handler/cly;" > $HOME/.local/share/applications/Catalyst.desktop
+
+xdg-mime default $HOME/.local/share/applications/Catalyst.desktop x-scheme-handler/cly
+
+echo -e "\e[1;92mCatalyst installed successfully\033[0m "
+exit 0
+>>>>>>> 5428102 (Finished the scripts)

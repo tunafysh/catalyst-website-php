@@ -1,3 +1,33 @@
 #!/bin/bash
 
-echo "Initializing update"
+function info() {
+    echo -e "\e[1;97minfo:\033[0m $1"
+}
+function warn() {
+    echo -e "\e[1;93mwarning:\033[0m $1"
+}
+function err() {
+    echo -e "\e[1;93merror:\033[0m $1"
+}
+
+info "Initiating update"
+
+if [[ ! -d "$HOME/.catalyst" ]]; then
+    error "Catalyst is not installed"
+    exit 0
+fi
+
+cpu_arch=$(uname -m)
+if [[ $cpu_arch == "x86_64" ]]; then
+    cpu_arch="amd64"
+elif [[ $cpu_arch == "aarch64" ]]; then
+    cpu_arch="arm64"
+fi
+
+rm $HOME/.catalyst/bin/*
+
+info "Downloading binary"
+
+curl -sSL https://github.com/tunafysh/Catalyst/releases/download/v0.0.2/catalyst-linux-$cpu_arch.zip | unzip -d ~/.catalyst/bin
+
+echo -e "\e[1;92mCatalyst updated successfully\033[0m"
